@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CarDelearshipDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Buyer">
+    <Key>
+      <PropertyRef Name="BuyerID" />
+    </Key>
+    <Property Name="BuyerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="LicenseNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="PhoneNumber" Type="String" MaxLength="12" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Car_BuyerID" Relationship="Self.FK_Car_BuyerID_Buyer" FromRole="Buyer" ToRole="Car_BuyerID" />
+  </EntityType>
+  <EntityType Name="Car">
+    <Key>
+      <PropertyRef Name="CarID" />
+    </Key>
+    <Property Name="CarID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="VinNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Make" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Model" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="ModelYear" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Car_BuyerID" Relationship="Self.FK_Car_BuyerID_Car" FromRole="Car" ToRole="Car_BuyerID" />
+  </EntityType>
+  <EntityType Name="Car_BuyerID">
+    <Key>
+      <PropertyRef Name="Car_BuyerID1" />
+    </Key>
+    <Property Name="Car_BuyerID1" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CarID" Type="Int32" Nullable="false" />
+    <Property Name="BuyerID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Buyer" Relationship="Self.FK_Car_BuyerID_Buyer" FromRole="Car_BuyerID" ToRole="Buyer" />
+    <NavigationProperty Name="Car" Relationship="Self.FK_Car_BuyerID_Car" FromRole="Car_BuyerID" ToRole="Car" />
+  </EntityType>
+  <Association Name="FK_Car_BuyerID_Buyer">
+    <End Role="Buyer" Type="Self.Buyer" Multiplicity="1" />
+    <End Role="Car_BuyerID" Type="Self.Car_BuyerID" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Buyer">
+        <PropertyRef Name="BuyerID" />
+      </Principal>
+      <Dependent Role="Car_BuyerID">
+        <PropertyRef Name="BuyerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Car_BuyerID_Car">
+    <End Role="Car" Type="Self.Car" Multiplicity="1" />
+    <End Role="Car_BuyerID" Type="Self.Car_BuyerID" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Car">
+        <PropertyRef Name="CarID" />
+      </Principal>
+      <Dependent Role="Car_BuyerID">
+        <PropertyRef Name="CarID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="CarDelearshipDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Buyers" EntityType="Self.Buyer" />
+    <EntitySet Name="Cars" EntityType="Self.Car" />
+    <EntitySet Name="Car_BuyerID" EntityType="Self.Car_BuyerID" />
+    <AssociationSet Name="FK_Car_BuyerID_Buyer" Association="Self.FK_Car_BuyerID_Buyer">
+      <End Role="Buyer" EntitySet="Buyers" />
+      <End Role="Car_BuyerID" EntitySet="Car_BuyerID" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Car_BuyerID_Car" Association="Self.FK_Car_BuyerID_Car">
+      <End Role="Car" EntitySet="Cars" />
+      <End Role="Car_BuyerID" EntitySet="Car_BuyerID" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
